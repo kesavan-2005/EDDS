@@ -1,0 +1,28 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual env
+.venv/
+venv/
+env/
+
+# IDEs
+.idea/
+*.iml
+.vscode/
+
+# Data and models (do NOT commit large datasets or model weights)
+data/
+models/
+*.h5
+*.keras
+*.hdf5
+*.ckpt
+*.pt
+*.pkl
+
+# OS files
+.DS_Store
+Thumbs.db
