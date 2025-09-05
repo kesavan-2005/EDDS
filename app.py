@@ -7,13 +7,16 @@ import tensorflow as tf
 from tensorflow.keras.models import load_model
 from tensorflow.keras.preprocessing import image
 
-# === Load models ===
-MODEL_DIR = r"D:\EDDS\models"
+# === Paths ===
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))   # root of the project
+MODEL_DIR = os.path.join(BASE_DIR, "models")
+DATA_DIR = os.path.join(BASE_DIR, "data")  # if you use data files later
 
-diabetes_model = load_model(os.path.join(MODEL_DIR, r"D:\EDDS\models\diabetes_model.keras"))
-diabetes_scaler = joblib.load(os.path.join(MODEL_DIR, r"D:\EDDS\models\diabetes_scaler.pkl"))
-retinopathy_model = load_model(os.path.join(MODEL_DIR, r"D:\EDDS\models\retinopathy_model.keras"))
-xray_model = load_model(os.path.join(MODEL_DIR, r"D:\EDDS\models\xray_cnn_model.keras"))
+# === Load models & scaler ===
+diabetes_model = load_model(os.path.join(MODEL_DIR, "diabetes_model.keras"))
+diabetes_scaler = joblib.load(os.path.join(MODEL_DIR, "diabetes_scaler.pkl"))
+retinopathy_model = load_model(os.path.join(MODEL_DIR, "retinopathy_model.keras"))
+xray_model = load_model(os.path.join(MODEL_DIR, "xray_cnn_model.keras"))
 
 # === Predict diabetes ===
 def predict_diabetes(input_data):
@@ -77,13 +80,13 @@ retina_img = st.file_uploader("Upload Retina Image", type=["jpg", "jpeg", "png"]
 
 if st.button("🔬 Predict Retinopathy"):
     if retina_img:
-        retina_path = "temp_retina.jpg"
+        retina_path = os.path.join(BASE_DIR, "temp_retina.jpg")
         with open(retina_path, "wb") as f:
             f.write(retina_img.read())
         with st.spinner("Analyzing retina image..."):
             r_class = predict_retinopathy(retina_path)
             st.success(f"Predicted Class: {r_class}")
-            os.remove(retina_path)
+        os.remove(retina_path)
     else:
         st.warning("Please upload a retina image.")
 
@@ -95,12 +98,12 @@ xray_img = st.file_uploader("Upload Chest X-ray Image", type=["jpg", "jpeg", "pn
 
 if st.button("🧬 Predict Chest X-ray"):
     if xray_img:
-        xray_path = "temp_xray.jpg"
+        xray_path = os.path.join(BASE_DIR, "temp_xray.jpg")
         with open(xray_path, "wb") as f:
             f.write(xray_img.read())
         with st.spinner("Analyzing chest X-ray..."):
             x_class = predict_xray(xray_path)
             st.success(f"Predicted Class: {x_class}")
-            os.remove(xray_path)
+        os.remove(xray_path)
     else:
         st.warning("Please upload a chest X-ray image.")
